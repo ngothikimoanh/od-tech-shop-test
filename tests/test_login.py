@@ -1,16 +1,53 @@
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from pages.login_page import LoginPage
 
-
-def test_valid_login(driver, config):
-    base_url = config.get("base_url", "https://example.com")
-    driver.get(base_url)
+def test_missing_phone_number(driver, config):
+    base_url = config.get("base_url", "http://localhost:8000/")
+    driver.get(base_url + "auth/login")
 
     login_page = LoginPage(driver, timeout=int(config.get("timeout", 10)))
 
-    login_page.enter_username("testuser")
-    login_page.enter_password("password123")
+    login_page.enter_phone_number("")
+    login_page.enter_password("Kimoanh2003@")
     login_page.click_login()
 
-    # Thêm assert để kiểm tra kết quả đăng nhập
-    # Ví dụ: Kiểm tra URL hoặc element đặc trưng xuất hiện sau đăng nhập thành công
-    assert "dashboard" in driver.current_url, "Đăng nhập không thành công, không tìm thấy 'dashboard' trong URL"
+    assert "Số điện thọai không được bỏ trống" in driver.page_source, "Đăng nhập thất bại"
+def test_missing_pasword(driver, config):
+    base_url = config.get("base_url", "http://localhost:8000/")
+    driver.get(base_url + "auth/login")
+
+    login_page = LoginPage(driver, timeout=int(config.get("timeout", 10)))
+
+    login_page.enter_phone_number("0784253460")
+    login_page.enter_password("")
+    login_page.click_login()
+
+    assert "Mật khẩu không được bỏ trống" in driver.page_source, "Đăng nhập thất bại"
+
+def test_phone_number_is_not_registered(driver, config):
+    base_url = config.get("base_url", "http://localhost:8000/")
+    driver.get(base_url + "auth/login")
+
+    login_page = LoginPage(driver, timeout=int(config.get("timeout", 10)))
+
+    login_page.enter_phone_number("0784255344")
+    login_page.enter_password("Oanh123@")
+    login_page.click_login()
+
+    WebDriverWait(driver, 3).until(EC.url_contains("http://localhost:8000/auth/login"))
+    assert "Số điện thoại này chưa được đăng ký."  in driver.page_source, "Đăng nhập thất bại"
+
+def test_success_login(driver, config):
+    base_url = config.get("base_url", "http://localhost:8000/")
+    driver.get(base_url + "auth/login")
+
+    login_page = LoginPage(driver, timeout=int(config.get("timeout", 10)))
+
+    login_page.enter_phone_number("0784253460")
+    login_page.enter_password("Kimoanh2003@")
+    login_page.click_login()
+
+    WebDriverWait(driver, 3).until(EC.url_contains("http://localhost:8000/"))
+    assert "******3460" in driver.page_source, "Đăng nhập thất bại"

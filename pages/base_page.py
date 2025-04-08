@@ -6,6 +6,7 @@ class BasePage:
     def __init__(self, driver, timeout=10):
         self.driver = driver
         self.timeout = timeout
+        self.driver.maximize_window()
 
     def find_element(self, locator):
         return WebDriverWait(self.driver, self.timeout).until(EC.presence_of_element_located(locator))
