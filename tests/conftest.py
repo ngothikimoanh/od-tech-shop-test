@@ -4,6 +4,7 @@ import sys
 
 import pytest
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -18,11 +19,12 @@ def config():
 
 @pytest.fixture(scope="function")
 def driver(config):
-    driver = webdriver.Chrome()
+    options = Options()
+    options.add_argument("--lang=vi")
+    driver = webdriver.Chrome(options=options)
     driver.implicitly_wait(int(config.get("timeout", 10)))
     yield driver
     driver.quit()
-
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):

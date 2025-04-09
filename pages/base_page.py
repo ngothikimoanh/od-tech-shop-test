@@ -1,8 +1,10 @@
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 
 class BasePage:
+
     def __init__(self, driver, timeout=10):
         self.driver = driver
         self.timeout = timeout
@@ -18,3 +20,8 @@ class BasePage:
         elem = self.find_element(locator)
         elem.clear()
         elem.send_keys(text)
+
+    def wait_for_text(self, text, by=By.TAG_NAME, value="body"):
+        WebDriverWait(self.driver, self.timeout).until(
+            EC.text_to_be_present_in_element((by, value), text)
+        )
