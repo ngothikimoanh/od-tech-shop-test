@@ -1,14 +1,11 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
-class LoginPage(BasePage):
-    phone_number_input = (By.NAME, "phone_number")
-    password_input = (By.NAME, "password")
-    login_button = (By.CSS_SELECTOR,".btn.btn-primary")
-    error_message = (By.CSS_SELECTOR, ".text-danger")
 
+class RegisterPage(BasePage):
+    phone_number_input = (By.ID, "phone_number")
+    password_input = (By.ID, "password")
+    login_button = (By.ID, "login_submit_btn")
 
     def enter_phone_number(self, phone_number):
         self.send_keys(self.phone_number_input, phone_number)
@@ -18,9 +15,3 @@ class LoginPage(BasePage):
 
     def click_login(self):
         self.click(self.login_button)
-
-    def get_error_message(self):
-        error_element = WebDriverWait(self.driver, self.timeout).until(
-            EC.visibility_of_element_located(self.error_message)
-        )
-        return error_element.text.strip()
