@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
-
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class LoginPage(BasePage):
     phone_number_input = (By.NAME, "phone_number")
@@ -19,4 +20,7 @@ class LoginPage(BasePage):
         self.click(self.login_button)
 
     def get_error_message(self):
-        self.find_element(self.error_message)
+        error_element = WebDriverWait(self.driver, self.timeout).until(
+            EC.visibility_of_element_located(self.error_message)
+        )
+        return error_element.text.strip()
