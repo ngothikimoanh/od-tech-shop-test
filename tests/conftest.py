@@ -2,6 +2,7 @@ import configparser
 import os
 import sys
 
+import psycopg2
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -25,6 +26,19 @@ def driver(config):
     driver.implicitly_wait(int(config.get("timeout", 10)))
     yield driver
     driver.quit()
+
+
+@pytest.fixture(scope="function")
+def database(config):
+    database = psycopg2.connect(
+        host=config.get("pg_host"),
+        port=config.get("pg_port"),
+        database=config.get("pg_database"),
+        user=config.get("pg_user"),
+        password=config.get("pg_password")
+    )
+    yield database
+    database.close()
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)

@@ -4,12 +4,12 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 
 class BasePage:
-
-    def __init__(self, driver,config,timeout=10):
+    def __init__(self, driver, config, timeout=10):
         self.driver = driver
         self.config = config
         self.timeout = timeout
         self.driver.maximize_window()
+        self.base_url = config['base_url']
 
     def find_element(self, locator):
         return WebDriverWait(self.driver, self.timeout).until(EC.presence_of_element_located(locator))

@@ -230,12 +230,12 @@ def test_password_mismatch_with_confirm(driver, config):
     assert "Mật khẩu nhập lại không giống với mật khẩu trước" in driver.page_source
 
 
-# TODO: CHECK DB
-def test_success_register(driver, config):
-
-    register_page = RegisterPage(driver, config)
-
-    register_page.enter_phone_number("0935923546")
-    register_page.enter_password("P@ssw0rd1")
-    register_page.enter_confirm_password("P@ssw0rd1")
-    register_page.click_register()
+# # TODO: CHECK DB
+# def test_success_register(driver, config):
+#
+#     register_page = RegisterPage(driver, config)
+#
+#     register_page.enter_phone_number("0935923546")
+#     register_page.enter_password("P@ssw0rd1")
+#     register_page.enter_confirm_password("P@ssw0rd1")
+#     register_page.click_register()

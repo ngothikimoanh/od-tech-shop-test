@@ -50,8 +50,12 @@ def test_phone_number_not_registered(driver, config):
 
 
 # TODO: check DB
-def test_successful_login(driver, config):
+def test_successful_login(driver, config, database):
     login_page = LoginPage(driver, config)
+
+    cursor = database.cursor()
+    cursor.execute("SELECT * FROM users WHERE phone_number = '0784253460'")
+    print(cursor.fetchone())
 
     login_page.enter_phone_number("0784253460")
     login_page.enter_password("Kimoanh2003@")

@@ -12,14 +12,12 @@ class ProfilePage(BasePage):
     def __init__(self, driver, config, timeout=10):
         super().__init__(driver, config, timeout)
 
-        base_url = config.get("base_url", "http://localhost:8000/")
-        driver.get(base_url)
+        driver.get(self.base_url)
         driver.add_cookie(cookie_dict={
             'name': 'sessionid',
             'value': config['sessionid'],
         })
-
-        driver.get(base_url + "users/profile")
+        driver.get(self.base_url + "users/profile")
 
     def enter_phone_number(self, phone_number):
         self.send_keys(self.phone_number, phone_number)

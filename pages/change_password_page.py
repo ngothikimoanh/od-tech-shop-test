@@ -11,14 +11,12 @@ class ChangePasswordPage(BasePage):
     def __init__(self, driver, config, timeout=10):
         super().__init__(driver, config, timeout)
 
-        base_url = config.get("base_url", "http://localhost:8000/")
-        driver.get(base_url)
+        driver.get(self.base_url)
         driver.add_cookie(cookie_dict={
             'name': 'sessionid',
             'value': config['sessionid'],
         })
-
-        driver.get(base_url + "users/change_password")
+        driver.get(self.base_url + "users/change_password")
 
     def enter_old_password(self, old_password):
         self.send_keys(self.old_password_input, old_password)
