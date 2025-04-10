@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 
-class RegisterPage(BasePage):
+class LoginPage(BasePage):
     phone_number_input = (By.ID, "phone_number")
     password_input = (By.ID, "password")
     login_button = (By.ID, "login_submit_btn")

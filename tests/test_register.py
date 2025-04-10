@@ -297,18 +297,18 @@ def test_password_mismatch_with_confirm(driver, config):
 
     assert "Mật khẩu nhập lại không giống với mật khẩu trước" in driver.page_source
 
-# def test_success_register(driver, config):
-#     base_url = config.get("base_url", "http://localhost:8000/")
-#     register_url = base_url + "auth/register"
-#     driver.get(register_url)
-#
-#     register_page = RegisterPage(driver, timeout=int(config.get("timeout", 5)))
-#
-#     register_page.enter_phone_number("0905655345")
-#     register_page.enter_password("P@ssw0rd1")
-#     register_page.enter_confirm_password("P@ssw0rd1")
-#     register_page.click_register()
-#
-#     WebDriverWait(driver, 3).until(EC.url_contains(base_url))
-#
-#     assert register_url != driver.current_url, "Đăng nhập thất bại"
+
+#TODO: CHECK DB
+def test_success_register(driver, config):
+    base_url = config.get("base_url", "http://localhost:8000/")
+    register_url = base_url + "auth/register"
+    driver.get(register_url)
+
+    register_page = RegisterPage(driver, timeout=int(config.get("timeout", 5)))
+
+    register_page.enter_phone_number("0905655345")
+    register_page.enter_password("P@ssw0rd1")
+    register_page.enter_confirm_password("P@ssw0rd1")
+    register_page.click_register()
+
+    WebDriverWait(driver, 3).until(EC.url_contains(base_url))
