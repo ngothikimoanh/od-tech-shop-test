@@ -224,3 +224,15 @@ def test_password_with_not_whitespace(driver, config):
     change_password_page.wait_for_text("Mật khẩu không được chứa khoảng cách.")
 
     assert "Mật khẩu không được chứa khoảng cách." in driver.page_source
+
+def test_success_change_password(driver, config):
+    change_password_page = ChangePasswordPage(driver, config)
+
+    change_password_page.enter_old_password("Kim0111@")
+    change_password_page.enter_new_password("Oanh2003@")
+    change_password_page.enter_new_password_again("Oanh2003@")
+    change_password_page.click_change_password()
+
+    change_password_page.wait_for_text("Đổi mật khẩu thành công")
+
+    assert "Đổi mật khẩu thành công" in driver.page_source

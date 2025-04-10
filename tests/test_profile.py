@@ -1,4 +1,5 @@
 from pages.profile_page import ProfilePage
+from tests.conftest import database
 
 
 def test_update_profile_with_invalid_email(driver, config):
@@ -36,10 +37,27 @@ def test_update_profile_with_empty_phone(driver, config):
     assert "Trường này là bắt buộc." in driver.page_source
 
 
-# #TODO: CHECK DB
-# def test_points(driver, config):
-#
-#
+def test_points(driver, config, database):
+    phone_number = config["phone_number"]
+
+    profile_page = ProfilePage(driver, config)
+
+    cursor = database.cursor()
+
+    query = "SELECT points FROM users WHERE phone_number = %s"
+    cursor.execute(query, (phone_number,))
+
+    db_points = cursor.fetchone()
+
+    if db_points is None:
+        raise ValueError(f"No user found with phone number {phone_number}")
+
+    db_points = db_points[0]
+    displayed_points = profile_page.get_points().replace(',', '')
+    assert int(db_points) == int(displayed_points), (
+        f"Points mismatch: DB={db_points}, Browser={displayed_points}"
+    )
+
 
 def test_update_valid_profile(driver, config):
     profile_page = ProfilePage(driver, config)

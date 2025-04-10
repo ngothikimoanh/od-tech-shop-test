@@ -8,6 +8,7 @@ class ProfilePage(BasePage):
     last_name = (By.ID, "last_name_input")
     first_name = (By.ID, "first_name_input")
     update_button = (By.ID, "update_profile_btn")
+    points = (By.ID, "user_points")
 
     def __init__(self, driver, config, timeout=10):
         super().__init__(driver, config, timeout)
@@ -33,3 +34,7 @@ class ProfilePage(BasePage):
 
     def click_update(self):
         self.click(self.update_button)
+
+    def get_points(self):
+        return self.get_text(self.points)
+

@@ -230,12 +230,19 @@ def test_password_mismatch_with_confirm(driver, config):
     assert "Mật khẩu nhập lại không giống với mật khẩu trước" in driver.page_source
 
 
-# # TODO: CHECK DB
-# def test_success_register(driver, config):
-#
-#     register_page = RegisterPage(driver, config)
-#
-#     register_page.enter_phone_number("0935923546")
-#     register_page.enter_password("P@ssw0rd1")
-#     register_page.enter_confirm_password("P@ssw0rd1")
-#     register_page.click_register()
+def test_success_register(driver, config, database):
+    register_page = RegisterPage(driver, config)
+
+    phone_number = "0935923546"
+
+    cursor = database.cursor()
+    query = "SELECT * FROM users WHERE phone_number = %s"
+    cursor.execute(query, (phone_number,))
+    user = cursor.fetchone()
+
+    register_page.enter_phone_number(phone_number)
+    register_page.enter_password("P@ssw0rd1")
+    register_page.enter_confirm_password("P@ssw0rd1")
+    register_page.click_register()
+
+    assert user is not None, f"User with phone number {phone_number} was not registered in the database"

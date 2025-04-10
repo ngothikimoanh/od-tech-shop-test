@@ -26,3 +26,6 @@ class BasePage:
         WebDriverWait(self.driver, self.timeout).until(
             EC.text_to_be_present_in_element((by, value), text)
         )
+
+    def get_text(self, locator):
+        return self.driver.find_element(*locator).text

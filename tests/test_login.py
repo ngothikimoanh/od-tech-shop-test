@@ -49,13 +49,17 @@ def test_phone_number_not_registered(driver, config):
     assert "Số điện thoại này chưa được đăng ký." in driver.page_source
 
 
-# TODO: check DB
 def test_successful_login(driver, config, database):
     login_page = LoginPage(driver, config)
 
-    cursor = database.cursor()
-    cursor.execute("SELECT * FROM users WHERE phone_number = '0784253460'")
-    print(cursor.fetchone())
+    phone_number = "0784253460"
 
-    login_page.enter_phone_number("0784253460")
+    cursor = database.cursor()
+    query = "SELECT * FROM users WHERE phone_number = %s"
+    cursor.execute(query, (phone_number,))
+    user = cursor.fetchone()
+
+    login_page.enter_phone_number(phone_number)
     login_page.enter_password("Kimoanh2003@")
+
+    assert user is not None, f"User with phone number {phone_number} was not registered in the database"
