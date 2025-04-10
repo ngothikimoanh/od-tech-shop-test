@@ -6,6 +6,11 @@ class LoginPage(BasePage):
     password_input = (By.ID, "password")
     login_button = (By.ID, "login_submit_btn")
 
+    def __init__(self, driver, config, timeout=10):
+        super().__init__(driver, config, timeout)
+        base_url = config.get("base_url", "http://localhost:8000/")
+        driver.get(base_url + "auth/login")
+
     def enter_phone_number(self, phone_number):
         self.send_keys(self.phone_number_input, phone_number)
 

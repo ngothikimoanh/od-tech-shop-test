@@ -10,7 +10,6 @@ class ChangePasswordPage(BasePage):
 
     def __init__(self, driver, config, timeout=10):
         super().__init__(driver, config, timeout)
-        print('config= ',config)
 
         base_url = config.get("base_url", "http://localhost:8000/")
         driver.get(base_url)
