@@ -5,8 +5,9 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 class BasePage:
 
-    def __init__(self, driver, timeout=10):
+    def __init__(self, driver,config,timeout=10):
         self.driver = driver
+        self.config = config
         self.timeout = timeout
         self.driver.maximize_window()
 

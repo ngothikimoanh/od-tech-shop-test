@@ -26,6 +26,7 @@ def driver(config):
     yield driver
     driver.quit()
 
+
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     outcome = yield

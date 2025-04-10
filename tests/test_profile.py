@@ -10,8 +10,8 @@ def login_and_go_to_profile(driver, config):
     driver.get(base_url + "auth/login")
 
     login_page = LoginPage(driver, timeout=int(config.get("timeout", 10)))
-    login_page.enter_phone_number("0914406376")
-    login_page.enter_password("Oanh2003@")
+    login_page.enter_phone_number("0784253460")
+    login_page.enter_password("Kimoanh2003@")
     login_page.click_login()
 
     WebDriverWait(driver, 5).until(EC.url_contains("/"))
