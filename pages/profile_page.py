@@ -1,8 +1,16 @@
+from configparser import SectionProxy
+
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
+from sqlalchemy.orm import Session
+
 from pages.base_page import BasePage
+from models.user import User
 
 
 class ProfilePage(BasePage):
+    URL = "users/profile"
+
     phone_number = (By.ID, "phone_number_input")
     email = (By.ID, "email_input")
     last_name = (By.ID, "last_name_input")
@@ -10,15 +18,10 @@ class ProfilePage(BasePage):
     update_button = (By.ID, "update_profile_btn")
     points = (By.ID, "user_points")
 
-    def __init__(self, driver, config, timeout=10):
-        super().__init__(driver, config, timeout)
-
-        driver.get(self.base_url)
-        driver.add_cookie(cookie_dict={
-            'name': 'sessionid',
-            'value': config['sessionid'],
-        })
-        driver.get(self.base_url + "users/profile")
+    def __init__(self, driver: WebDriver, config: SectionProxy, db: Session | None = None, timeout: int = 10):
+        super().__init__(driver, config, db, timeout)
+        super().set_session_id()
+        driver.get(self.config['base_url'] + self.URL)
 
     def enter_phone_number(self, phone_number):
         self.send_keys(self.phone_number, phone_number)
@@ -38,3 +41,6 @@ class ProfilePage(BasePage):
     def get_points(self):
         return self.get_text(self.points)
 
+    def get_points_from_db(self):
+        point = self.db.query(User).filter(User.phone_number == self.config['phone_number']).first().points
+        return f"{point:0.0f}"

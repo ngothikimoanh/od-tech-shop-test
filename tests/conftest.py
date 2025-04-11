@@ -2,10 +2,11 @@ import configparser
 import os
 import sys
 
-import psycopg2
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
@@ -23,22 +24,22 @@ def driver(config):
     options = Options()
     options.add_argument("--lang=vi")
     driver = webdriver.Chrome(options=options)
-    driver.implicitly_wait(int(config.get("timeout", 10)))
+    driver.implicitly_wait(int(config.get("timeout", '10')))
     yield driver
     driver.quit()
 
 
 @pytest.fixture(scope="function")
 def database(config):
-    database = psycopg2.connect(
-        host=config.get("pg_host"),
-        port=config.get("pg_port"),
-        database=config.get("pg_database"),
-        user=config.get("pg_user"),
-        password=config.get("pg_password")
+    connection_string = (
+        f"postgresql://{config.get('pg_user')}:{config.get('pg_password')}"
+        f"@{config.get('pg_host')}:{config.get('pg_port')}/{config.get('pg_database')}"
     )
-    yield database
-    database.close()
+    engine = create_engine(connection_string, echo=False)
+    SessionLocal = sessionmaker(bind=engine)
+    session = SessionLocal()
+    yield session
+    session.close()
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)

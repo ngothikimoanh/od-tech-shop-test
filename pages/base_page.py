@@ -1,21 +1,28 @@
+from configparser import SectionProxy
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.webdriver import WebDriver
+from sqlalchemy.orm import Session
+
+import time
 
 
 class BasePage:
-    def __init__(self, driver, config, timeout=10):
+    def __init__(self, driver: WebDriver, config: SectionProxy, db: Session | None = None, timeout: int = 10):
         self.driver = driver
+        self.db = db
         self.config = config
         self.timeout = timeout
         self.driver.maximize_window()
-        self.base_url = config['base_url']
 
     def find_element(self, locator):
         return WebDriverWait(self.driver, self.timeout).until(EC.presence_of_element_located(locator))
 
     def click(self, locator):
         self.find_element(locator).click()
+        time.sleep(3)
 
     def send_keys(self, locator, text):
         elem = self.find_element(locator)
@@ -29,3 +36,14 @@ class BasePage:
 
     def get_text(self, locator):
         return self.driver.find_element(*locator).text
+
+    def get_session_id(self):
+        cookie = self.driver.get_cookie('sessionid') or {}
+        return cookie.get('value')
+
+    def set_session_id(self):
+        self.driver.get(self.config['base_url'])
+        self.driver.add_cookie(cookie_dict={
+            'name': 'sessionid',
+            'value': self.config['sessionid'],
+        })

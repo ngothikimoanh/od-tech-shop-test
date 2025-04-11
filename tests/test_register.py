@@ -1,6 +1,4 @@
 from pages.register_page import RegisterPage
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 
 def test_phone_number_no_special_chars(driver, config):
@@ -231,18 +229,15 @@ def test_password_mismatch_with_confirm(driver, config):
 
 
 def test_success_register(driver, config, database):
-    register_page = RegisterPage(driver, config)
+    register_page = RegisterPage(driver, config, db=database)
 
     phone_number = "0935923546"
-
-    cursor = database.cursor()
-    query = "SELECT * FROM users WHERE phone_number = %s"
-    cursor.execute(query, (phone_number,))
-    user = cursor.fetchone()
+    password = confirm_password = "P@ssw0rd1"
 
     register_page.enter_phone_number(phone_number)
-    register_page.enter_password("P@ssw0rd1")
-    register_page.enter_confirm_password("P@ssw0rd1")
+    register_page.enter_password(password)
+    register_page.enter_confirm_password(confirm_password)
     register_page.click_register()
 
-    assert user is not None, f"User with phone number {phone_number} was not registered in the database"
+    assert register_page.get_user_by_phone_number_from_db(phone_number=phone_number) is not None
+    register_page.delete_user_by_phone_number_in_db(phone_number=phone_number)
