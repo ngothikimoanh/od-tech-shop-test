@@ -53,17 +53,17 @@ def test_phone_invalid_format(driver, config):
     assert "Số điện thoại này không hợp lệ." in driver.page_source
 
 
-def test_phone_already_registered(driver, config):
-    register_page = RegisterPage(driver, config)
+def test_phone_already_registered(driver, config, database):
+    register_page = RegisterPage(driver, config, db = database)
 
     register_page.enter_phone_number("0784253460")
     register_page.enter_password("Kimoanh2003@")
     register_page.enter_confirm_password("Kimoanh2003@")
     register_page.click_register()
 
-    register_page.wait_for_text("Số điện thoại này đã tồn tại.")
+    register_page.wait_for_text("Số điện thoại này đã được đăng ký.")
 
-    assert "Số điện thoại này đã tồn tại." in driver.page_source
+    assert "Số điện thoại này đã được đăng ký." in driver.page_source
 
 
 def test_password_digit_only(driver, config):

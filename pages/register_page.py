@@ -6,7 +6,7 @@ from pages.base_page import BasePage
 
 
 class RegisterPage(BasePage):
-    URL = "auth/register"
+    URL = "register"
 
     phone_number_input = (By.ID, "phone_number")
     password_input = (By.ID, "password")

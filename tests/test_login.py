@@ -29,7 +29,7 @@ def test_wrong_password(driver, config):
     login_page = LoginPage(driver, config)
 
     login_page.enter_phone_number("0784253460")
-    login_page.enter_password("Oanh2003@")
+    login_page.enter_password("KimOanh2003@")
     login_page.click_login()
 
     login_page.wait_for_text("Mật khẩu không đúng. Vui lòng kiểm tra lại")

@@ -9,7 +9,7 @@ from models.user import User
 
 
 class LoginPage(BasePage):
-    URL = "auth/login"
+    URL = "login"
 
     phone_number_input = (By.ID, "phone_number")
     password_input = (By.ID, "password")
@@ -30,3 +30,4 @@ class LoginPage(BasePage):
 
     def get_user_by_phone_number_from_db(self, phone_number: str):
         return self.db.query(User).filter(User.phone_number == phone_number).first()
+
