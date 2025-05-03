@@ -15,7 +15,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 def config():
     config = configparser.ConfigParser()
     config_file_path = os.path.join(os.path.dirname(__file__), "..", "config", "config.ini")
-    config.read(config_file_path)
+    config.read(config_file_path, encoding="utf-8")
     return config["DEFAULT"]
 
 

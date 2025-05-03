@@ -10,12 +10,12 @@ import time
 
 
 class BasePage:
+
     def __init__(self, driver: WebDriver, config: SectionProxy, db: Session | None = None, timeout: int = 10):
         self.driver = driver
         self.db = db
         self.config = config
         self.timeout = timeout
-        self.driver.maximize_window()
 
     def find_element(self, locator):
         return WebDriverWait(self.driver, self.timeout).until(EC.presence_of_element_located(locator))
