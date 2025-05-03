@@ -50,3 +50,4 @@ class CreatOrderPage(Navigation):
             f"DELETE FROM carts WHERE user_id = (SELECT id FROM users WHERE phone_number=:phone_number)"),
             {"phone_number" : self.config["buyer_phone_number"]})
         self.db.commit()
+

@@ -1,10 +1,14 @@
 from pages.base_page import BasePage
-from selenium.webdriver.common.by import By
 
 
 class Navigation(BasePage):
-    cart_btn = (By.ID, "cart")
-    login_btn = (By.ID, "nav_login_btn")
+    logo_btn =  ("id", "logo")
+
+    cart_btn = ("id", "cart")
+    login_btn = ("id", "nav_login_btn")
+
+    def click_logo_btn(self):
+        self.click(self.logo_btn)
 
     def click_cart_btn(self):
         self.click(self.cart_btn)

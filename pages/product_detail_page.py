@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from pages.navigation import Navigation
 
 class ProductDetailPage(Navigation):
-    product_name_title = ("id", "product_name_title")
+    product_name_title = (By.ID, "product_name_title")
 
     add_to_cart_btn = (By.ID, "add_cart")
     buy_now_btn = (By.ID, "buy_now")
