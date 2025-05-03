@@ -1,9 +1,8 @@
-from pages import home_page
 from pages.create_order_page import CreatOrderPage
 from pages.home_page import HomePage
 from pages.login_page import LoginPage
 from pages.product_detail_page import ProductDetailPage
-
+import re
 
 def test_add_one_product_to_cart_logged_in(driver, config, database):
     driver.get(config["base_url"])
@@ -97,4 +96,32 @@ def test_buy_now_btn_in_home_page_logged_in(driver, config, database):
     assert product_name in driver.page_source
     create_order_page = CreatOrderPage(driver, config, db=database)
     create_order_page.clear_carts()
+
+def test_creat_order_with_use_points_logged_in(driver, config, database):
+    driver.get(config["base_url"])
+
+    home_page = HomePage(driver, config)
+    home_page.click_login_btn()
+
+    login_page = LoginPage(driver, config)
+    login_page.enter_phone_number(config["buyer_phone_number"])
+    login_page.enter_password(config["buyer_password"])
+    login_page.click_login()
+
+    home_page.click_buy_now_btn(index=0)
+    create_order_page = CreatOrderPage(driver, config, db=database)
+
+    create_order_page.click_use_points()
+    total_amount = create_order_page.get_total_money()
+    temporary_total = create_order_page.get_temporary_total()
+    accumulated_points = create_order_page.get_accumulated_points()
+
+    total_amount = temporary_total + accumulated_points
+    print(f"Total amount: {total_amount}",  create_order_page.get_total_money())
+
+    assert total_amount == create_order_page.get_total_money(), f"Tổng tiền ({total_amount}) != Tạm tính ({temporary_total}) - Điểm ({accumulated_points})"
+    create_order_page.clear_carts()
+
+
+
 
