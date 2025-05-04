@@ -2,8 +2,10 @@ from selenium.webdriver.common.by import By
 from pages.navigation import Navigation
 from sqlalchemy import text
 import re
+from models.order import Order
 
-class CreatOrderPage(Navigation):
+
+class CreateOrderPage(Navigation):
     minus_quantity = (By.ID, "minus_quantity")
     plus_quantity = (By.ID, "plus_quantity")
 
@@ -37,7 +39,11 @@ class CreatOrderPage(Navigation):
         self.send_keys(self.buyer_address_input, orderBuyerAddress)
 
     def click_use_points(self):
-        self.click(self.use_points)
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        try:
+            self.click(self.use_points)
+        except:
+            pass
 
     def click_cash_payment_btn(self):
         self.click(self.cash_payment_btn)
@@ -51,7 +57,15 @@ class CreatOrderPage(Navigation):
     def clear_carts(self):
         self.db.execute(text(
             f"DELETE FROM carts WHERE user_id = (SELECT id FROM users WHERE phone_number=:phone_number)"),
-            {"phone_number" : self.config["buyer_phone_number"]})
+            {"phone_number": self.config["buyer_phone_number"]})
+        self.db.commit()
+
+    def get_browser_id(self):
+        return self.driver.get_cookie("browser_id")["value"]
+
+    def clear_cart_by_browser_id(self):
+        browser_id = self.get_browser_id()
+        self.db.execute(text("DELETE FROM carts WHERE browser_id = :browser_id"), {"browser_id": browser_id})
         self.db.commit()
 
     def get_total_money(self):
@@ -63,7 +77,12 @@ class CreatOrderPage(Navigation):
         return int(temp_total.replace(".", "").replace("₫", "").strip())
 
     def get_accumulated_points(self):
-        accumulated_points = self.get_text(self.order_accumulated_points)
-        cleaned = re.sub(r"[^\d-]", "", accumulated_points)
-        return int(cleaned) if cleaned else 0
+        try:
+            accumulated_points = self.get_text(self.order_accumulated_points)
+            cleaned = re.sub(r"[^\d-]", "", accumulated_points)
+            return int(cleaned) if cleaned else 0
+        except:
+            return 0
 
+    def has_order_with_phone(self, session, phone_number):
+        return session.query(Order).filter_by(buyer_phone_number=phone_number).count() > 0

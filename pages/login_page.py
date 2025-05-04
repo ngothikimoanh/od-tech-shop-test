@@ -8,9 +8,9 @@ from models.user import User
 
 class LoginPage(BasePage):
 
-    phone_number_input = ("id", "phone_number")
-    password_input = ("id", "password")
-    login_button = ("id", "login_submit_btn")
+    phone_number_input = ("id", "loginPhoneNumberInput")
+    password_input = ("id", "loginPasswordInput")
+    login_button = ("id", "loginSubmitBtn")
 
     def enter_phone_number(self, phone_number):
         self.send_keys(self.phone_number_input, phone_number)

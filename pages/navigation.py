@@ -4,8 +4,8 @@ from pages.base_page import BasePage
 class Navigation(BasePage):
     logo_btn =  ("id", "logo")
 
-    cart_btn = ("id", "cart")
-    login_btn = ("id", "nav_login_btn")
+    cart_btn = ("id", "navCartBtn")
+    login_btn = ("id", "navLoginBtn")
 
     def click_logo_btn(self):
         self.click(self.logo_btn)
