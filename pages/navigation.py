@@ -5,7 +5,6 @@ from pages.base_page import BasePage
 
 class Navigation(BasePage):
     logo_btn = ("id", "navBrand")
-
     cart_btn = ("id", "navCartBtn")
     login_btn = ("id", "navLoginBtn")
 

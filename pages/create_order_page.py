@@ -2,7 +2,6 @@ from selenium.webdriver.common.by import By
 from pages.navigation import Navigation
 from sqlalchemy import text
 import re
-from models.order import Order
 
 
 class CreateOrderPage(Navigation):

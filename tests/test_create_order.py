@@ -6,6 +6,7 @@ from pages.product_detail_page import ProductDetailPage
 
 def test_add_one_product_to_cart_not_logged_in(driver, config, database):
     driver.get(config["base_url"])
+    driver.maximize_window()
 
     home_page = HomePage(driver, config)
     home_page.click_first_product()
@@ -25,6 +26,7 @@ def test_add_one_product_to_cart_not_logged_in(driver, config, database):
 
 def test_add_many_quantity_product_to_cart_not_logged_in(driver, config, database):
     driver.get(config["base_url"])
+    driver.maximize_window()
 
     home_page = HomePage(driver, config)
     home_page.click_first_product()
@@ -49,6 +51,7 @@ def test_add_many_quantity_product_to_cart_not_logged_in(driver, config, databas
 
 def test_add_multiple_products_to_cart_not_logged_in(driver, config, database):
     driver.get(config["base_url"])
+    driver.maximize_window()
 
     home_page = HomePage(driver, config)
     home_page.click_first_product()
@@ -76,6 +79,7 @@ def test_add_multiple_products_to_cart_not_logged_in(driver, config, database):
 
 def test_buy_now_btn_in_home_page_not_logged_in(driver, config, database):
     driver.get(config["base_url"])
+    driver.maximize_window()
 
     home_page = HomePage(driver, config)
 
@@ -91,6 +95,7 @@ def test_buy_now_btn_in_home_page_not_logged_in(driver, config, database):
 
 def test_buy_now_in_detail_page_not_logged_in(driver, config, database):
     driver.get(config["base_url"])
+    driver.maximize_window()
 
     home_page = HomePage(driver, config)
     home_page.click_first_product()
@@ -109,6 +114,7 @@ def test_buy_now_in_detail_page_not_logged_in(driver, config, database):
 
 def test_add_one_product_to_cart_logged_in(driver, config, database):
     driver.get(config["base_url"])
+    driver.maximize_window()
 
     home_page = HomePage(driver, config)
     home_page.click_login_btn()
@@ -135,6 +141,7 @@ def test_add_one_product_to_cart_logged_in(driver, config, database):
 
 def test_add_many_quantity_product_to_cart_logged_in(driver, config, database):
     driver.get(config["base_url"])
+    driver.maximize_window()
 
     home_page = HomePage(driver, config)
     home_page.click_login_btn()
@@ -166,6 +173,7 @@ def test_add_many_quantity_product_to_cart_logged_in(driver, config, database):
 
 def test_add_multiple_products_to_cart_logged_in(driver, config, database):
     driver.get(config["base_url"])
+    driver.maximize_window()
 
     home_page = HomePage(driver, config)
     home_page.click_login_btn()
@@ -200,6 +208,7 @@ def test_add_multiple_products_to_cart_logged_in(driver, config, database):
 
 def test_buy_now_btn_in_home_page_logged_in(driver, config, database):
     driver.get(config["base_url"])
+    driver.maximize_window()
 
     home_page = HomePage(driver, config)
     home_page.click_login_btn()
@@ -221,6 +230,7 @@ def test_buy_now_btn_in_home_page_logged_in(driver, config, database):
 
 def test_buy_now_in_detail_page_logged_in(driver, config, database):
     driver.get(config["base_url"])
+    driver.maximize_window()
 
     home_page = HomePage(driver, config)
     home_page.click_login_btn()
