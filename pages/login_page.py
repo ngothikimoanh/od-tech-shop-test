@@ -1,13 +1,8 @@
-from configparser import SectionProxy
-
-from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.common.by import By
 from pages.base_page import BasePage
 from models.user import User
 
 
 class LoginPage(BasePage):
-
     phone_number_input = ("id", "loginPhoneNumberInput")
     password_input = ("id", "loginPasswordInput")
     login_button = ("id", "loginSubmitBtn")

@@ -23,6 +23,8 @@ class CreateOrderPage(Navigation):
     order_temporary_total = (By.ID, "order_temporary_total")
     order_total_amount = (By.ID, "orderTotalAmount")
 
+    number_product_in_cart = (By.CSS_SELECTOR, '.input-group-text.px-3')
+
     def click_minus_quantity(self):
         self.click(self.minus_quantity)
 
@@ -86,3 +88,6 @@ class CreateOrderPage(Navigation):
 
     def has_order_with_phone(self, session, phone_number):
         return session.query(Order).filter_by(buyer_phone_number=phone_number).count() > 0
+
+    def get_number_product_in_cart_text(self):
+        return int(self.get_text(self.number_product_in_cart))

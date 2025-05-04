@@ -2,6 +2,9 @@ from selenium.webdriver.common.by import By
 
 from pages.navigation import Navigation
 
+import time
+
+
 class ProductDetailPage(Navigation):
     product_name_title = (By.ID, "productNameTitle")
 
@@ -10,6 +13,7 @@ class ProductDetailPage(Navigation):
 
     def click_add_to_cart_btn(self):
         self.click(self.add_to_cart_btn)
+        time.sleep(3)
 
     def click_buy_now_btn(self):
         self.click(self.buy_now_btn)
