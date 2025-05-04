@@ -1,3 +1,5 @@
+import time
+
 from pages.base_page import BasePage
 
 
@@ -14,3 +16,4 @@ class LoginPage(BasePage):
 
     def click_login(self):
         self.click(self.login_button)
+        time.sleep(3)

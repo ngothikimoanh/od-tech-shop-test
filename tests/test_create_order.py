@@ -252,3 +252,21 @@ def test_buy_now_in_detail_page_logged_in(driver, config, database):
 
     create_order_page = CreateOrderPage(driver, config, db=database)
     create_order_page.clear_carts()
+
+
+def test_create_order_not_logged_in(driver, config, database):
+    driver.get(config["base_url"])
+    driver.maximize_window()
+
+    home_page = HomePage(driver, config)
+    product_element = home_page.get_first_product()
+    home_page.click_buy_now_btn(product_element)
+
+    create_order_page = CreateOrderPage(driver, config, db=database)
+    create_order_page.enter_buyer_name(config['buyer_name'])
+    create_order_page.enter_buyer_phone_number(config['buyer_phone_number'])
+    create_order_page.enter_buyer_address(config['buyer_address'])
+    create_order_page.click_order_btn()
+
+    orders = create_order_page.get_order_in_db()
+    assert len(orders) > 0
