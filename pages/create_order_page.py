@@ -1,33 +1,35 @@
+import re
 import time
 
 from selenium.webdriver.common.by import By
-from pages.navigation import Navigation
 from sqlalchemy import text
-import re
+
+from pages.navigation import Navigation
 
 
 class CreateOrderPage(Navigation):
-    minus_quantity = (By.ID, "minus_quantity")
-    plus_quantity = (By.ID, "plus_quantity")
+    minus_quantity = (By.ID, "minusBtn")
+    plus_quantity = (By.ID, "plusBtn")
 
     buyer_name_input = (By.ID, "orderBuyerName")
     buyer_phone_number_input = (By.ID, "orderBuyerPhoneNumber")
     buyer_address_input = (By.ID, "orderBuyerAddress")
 
     use_points = (By.ID, "isUsePoint")
-    order_accumulated_points = (By.ID, "order_accumulated_points")
+    order_accumulated_points = (By.ID, "orderPoint")
 
     cash_payment_btn = (By.ID, "cashOnDelivered")
     banking_payment_btn = (By.ID, "transferNow")
 
     order_btn = (By.ID, "orderBtn")
-    order_temporary_total = (By.ID, "order_temporary_total")
+    order_temporary_total = (By.ID, "orderTemporary")
     order_total_amount = (By.ID, "orderTotalAmount")
 
     number_product_in_cart = (By.CSS_SELECTOR, '.input-group-text.px-3')
 
     def click_minus_quantity(self):
         self.click(self.minus_quantity)
+        time.sleep(3)
 
     def click_plus_quantity(self):
         self.click(self.plus_quantity)
@@ -50,18 +52,20 @@ class CreateOrderPage(Navigation):
 
     def click_cash_payment_btn(self):
         self.click(self.cash_payment_btn)
+        time.sleep(3)
 
     def click_banking_payment_btn(self):
         self.click(self.banking_payment_btn)
+        time.sleep(3)
 
     def click_order_btn(self):
         self.click(self.order_btn)
         time.sleep(3)
 
-    def clear_carts(self):
+    def clear_carts(self, phone_number):
         self.db.execute(text(
             f"DELETE FROM carts WHERE user_id = (SELECT id FROM users WHERE phone_number=:phone_number)"),
-            {"phone_number": self.config["buyer_phone_number"]})
+            {"phone_number": phone_number})
         self.db.commit()
 
     def get_browser_id(self):

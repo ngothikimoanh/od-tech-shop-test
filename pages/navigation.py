@@ -1,13 +1,15 @@
 import time
 
-from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
+
+from pages.base_page import BasePage
 
 
 class Navigation(BasePage):
     logo_btn = (By.ID, "navBrand")
     cart_btn = (By.ID, "navCartBtn")
     login_btn = (By.ID, "navLoginBtn")
+    profile_btn = (By.ID, "navprofileBtn")
     admin_btn = (By.ID, "navAdminBtn")
     admin_order_btn = (By.ID, "navAdminOrders")
 
@@ -21,6 +23,10 @@ class Navigation(BasePage):
 
     def click_login_btn(self):
         self.click(self.login_btn)
+        time.sleep(3)
+
+    def click_profile_btn(self):
+        self.click(self.profile_btn)
         time.sleep(3)
 
     def click_admin_btn(self):
