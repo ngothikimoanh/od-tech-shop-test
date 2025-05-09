@@ -24,31 +24,6 @@ def test_add_one_product_to_cart(driver, config, database):
     create_order_page.clear_cart_by_browser_id()
 
 
-def test_add_many_quantity_product_to_cart(driver, config, database):
-    driver.get(config["base_url"])
-    driver.maximize_window()
-
-    home_page = HomePage(driver, config)
-    home_page.click_first_product()
-
-    product_detail_page = ProductDetailPage(driver, config)
-
-    number_add_to_cart = 5
-    for _ in range(number_add_to_cart):
-        product_detail_page.click_add_to_cart_btn()
-
-    product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert product_name != '' and product_name is not None
-
-    product_detail_page.click_cart_btn()
-    assert product_name in driver.page_source
-
-    create_order_page = CreateOrderPage(driver, config, db=database)
-    assert create_order_page.get_number_product_in_cart_text() == number_add_to_cart
-
-    create_order_page.clear_cart_by_browser_id()
-
-
 def test_add_multiple_products_to_cart(driver, config, database):
     driver.get(config["base_url"])
     driver.maximize_window()
@@ -74,6 +49,31 @@ def test_add_multiple_products_to_cart(driver, config, database):
     assert second_product_name in driver.page_source
 
     create_order_page = CreateOrderPage(driver, config, db=database)
+    create_order_page.clear_cart_by_browser_id()
+
+
+def test_add_many_quantity_product_to_cart(driver, config, database):
+    driver.get(config["base_url"])
+    driver.maximize_window()
+
+    home_page = HomePage(driver, config)
+    home_page.click_first_product()
+
+    product_detail_page = ProductDetailPage(driver, config)
+
+    number_add_to_cart = 5
+    for _ in range(number_add_to_cart):
+        product_detail_page.click_add_to_cart_btn()
+
+    product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
+    assert product_name != '' and product_name is not None
+
+    product_detail_page.click_cart_btn()
+    assert product_name in driver.page_source
+
+    create_order_page = CreateOrderPage(driver, config, db=database)
+    assert create_order_page.get_number_product_in_cart_text() == number_add_to_cart
+
     create_order_page.clear_cart_by_browser_id()
 
 
@@ -133,9 +133,17 @@ def test_add_one_product_to_car_logged_in(driver, config, database):
     assert product_name != '' and product_name is not None
 
     product_detail_page.click_cart_btn()
-    assert product_name in driver.page_source
 
     create_order_page = CreateOrderPage(driver, config, db=database)
+    user_name = create_order_page.get_buyer_name()
+    user_phone_number = create_order_page.get_buyer_phone_number()
+    user_address = create_order_page.get_buyer_address()
+
+    assert user_name in driver.page_source
+    assert user_phone_number in driver.page_source
+    assert user_address in driver.page_source
+    assert product_name in driver.page_source
+
     create_order_page.clear_carts(phone_number=config["buyer_phone_number"])
 
 
@@ -277,22 +285,25 @@ def test_delete_product_cart(driver, config, database):
     assert "Giỏ hàng trống" in driver.page_source
 
 
-def test_create_order_not_logged_in(driver, config, database):
+def test_order_fails_when_quantity_exceeds_available_stock(driver, config, database):
     driver.get(config["base_url"])
     driver.maximize_window()
 
     home_page = HomePage(driver, config)
-    product_element = home_page.get_first_product()
-    home_page.click_buy_now_btn(product_element)
-
+    product_name = home_page.get_product_name(home_page.get_first_product())
+    home_page.click_buy_now_btn(home_page.get_first_product())
     create_order_page = CreateOrderPage(driver, config, db=database)
+    quantity_number_increase = 6
+    for _ in range(quantity_number_increase):
+        create_order_page.click_plus_quantity()
+
     create_order_page.enter_buyer_name(config['buyer_name'])
     create_order_page.enter_buyer_phone_number(config['buyer_phone_number'])
     create_order_page.enter_buyer_address(config['buyer_address'])
+    create_order_page.click_banking_payment_btn()
     create_order_page.click_order_btn()
 
-    orders = create_order_page.get_order_in_db()
-    assert len(orders) > 0
+    assert f"Sản phẩm <strong>{product_name}</strong> không đủ số lượng" in driver.page_source
 
 
 def test_order_fails_with_only_user_name_provided(driver, config, database):
@@ -312,6 +323,7 @@ def test_order_fails_with_only_user_name_provided(driver, config, database):
 
     home_page.click_buy_now_btn(home_page.get_first_product())
     create_order_page = CreateOrderPage(driver, config, db=database)
+    create_order_page.enter_buyer_phone_number("")
     create_order_page.enter_buyer_name(name)
     create_order_page.click_order_btn()
 
@@ -320,7 +332,7 @@ def test_order_fails_with_only_user_name_provided(driver, config, database):
     create_order_page.clear_carts(phone_number=phone_number)
 
 
-def test_order_fails_with_only_user_phone_number_provided(driver, config, database):
+def test_order_fails_with_user_phone_number_provided(driver, config, database):
     driver.get(config["base_url"])
     driver.maximize_window()
     phone_number = "0784253462"
@@ -342,7 +354,7 @@ def test_order_fails_with_only_user_phone_number_provided(driver, config, databa
     create_order_page.clear_carts(phone_number=phone_number)
 
 
-def test_order_fails_with_only_user_address_provided(driver, config, database):
+def test_order_fails_with_user_address_provided(driver, config, database):
     driver.get(config["base_url"])
     driver.maximize_window()
     phone_number = "0784253462"
@@ -382,7 +394,9 @@ def test_order_with_cash_payment(driver, config, database):
     create_order_page.click_cash_payment_btn()
     create_order_page.click_order_btn()
 
-    assert "Đặt hàng thành công" in driver.page_source
+    orders = create_order_page.get_order_in_db()
+    assert len(orders) > 0
+    create_order_page.clear_order(phone_number=config['buyer_phone_number'])
 
 
 def test_order_with_banking_payment(driver, config, database):
@@ -400,25 +414,36 @@ def test_order_with_banking_payment(driver, config, database):
     create_order_page.click_banking_payment_btn()
     create_order_page.click_order_btn()
 
-    assert "Đặt hàng thành công" in driver.page_source
+    orders = create_order_page.get_order_in_db()
+    assert len(orders) > 0
+    create_order_page.clear_order(phone_number=config['buyer_phone_number'])
 
 
-def test_order_fails_when_quantity_exceeds_available_stock(driver, config, database):
+def test_order_with_logged_in(driver, config, database):
     driver.get(config["base_url"])
     driver.maximize_window()
 
     home_page = HomePage(driver, config)
-    product_name = home_page.get_product_name(home_page.get_first_product())
-    home_page.click_buy_now_btn(home_page.get_first_product())
-    create_order_page = CreateOrderPage(driver, config, db=database)
-    quantity_number_increase = 6
-    for _ in range(quantity_number_increase):
-        create_order_page.click_plus_quantity()
 
-    create_order_page.enter_buyer_name(config['buyer_name'])
-    create_order_page.enter_buyer_phone_number(config['buyer_phone_number'])
-    create_order_page.enter_buyer_address(config['buyer_address'])
-    create_order_page.click_banking_payment_btn()
+    home_page.click_login_btn()
+    login_page = LoginPage(driver, config)
+    login_page.enter_phone_number(config['buyer_phone_number'])
+    login_page.enter_password(config['buyer_password'])
+    login_page.click_login()
+
+    home_page.click_buy_now_btn(home_page.get_first_product())
+
+    create_order_page = CreateOrderPage(driver, config, db=database)
+    user_name = create_order_page.get_buyer_name()
+    user_phone_number = create_order_page.get_buyer_phone_number()
+    user_address = create_order_page.get_buyer_address()
+
+    assert user_name in driver.page_source
+    assert user_phone_number in driver.page_source
+    assert user_address in driver.page_source
+
     create_order_page.click_order_btn()
 
-    assert f"Sản phẩm <strong>{product_name}</strong> không đủ số lượng" in driver.page_source
+    orders = create_order_page.get_order_in_db()
+    assert len(orders) > 0
+    create_order_page.clear_order(phone_number=config['buyer_phone_number'])
