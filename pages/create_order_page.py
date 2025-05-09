@@ -124,11 +124,14 @@ class CreateOrderPage(Navigation):
             order_id = order[0][0]
             point_used = order[0][1]
 
+            self.db.execute(text("update devices set status = 'Có sẵn' where id in (select device_id from order_devices where order_id = :order_id)"),
+                            {'order_id': order_id})
             self.db.execute(text('delete from order_devices where order_id = :order_id'), {'order_id': order_id})
+
             self.db.execute(text('delete from order_products where order_id = :order_id'), {'order_id': order_id})
             self.db.execute(
                 text('update users set points = points + :point_used where phone_number = :phone_number'),
                 {'point_used': point_used, 'phone_number': phone_number}
             )
-            self.db.execute(text('delete from order where id = :order_id'), {'order_id': order_id})
+            self.db.execute(text('delete from orders where id = :order_id'), {'order_id': order_id})
             self.db.commit()

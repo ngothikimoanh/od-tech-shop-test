@@ -304,6 +304,7 @@ def test_order_fails_when_quantity_exceeds_available_stock(driver, config, datab
     create_order_page.click_order_btn()
 
     assert f"Sản phẩm <strong>{product_name}</strong> không đủ số lượng" in driver.page_source
+    create_order_page.clear_carts(phone_number=config['buyer_name'])
 
 
 def test_order_fails_with_only_user_name_provided(driver, config, database):
@@ -323,7 +324,6 @@ def test_order_fails_with_only_user_name_provided(driver, config, database):
 
     home_page.click_buy_now_btn(home_page.get_first_product())
     create_order_page = CreateOrderPage(driver, config, db=database)
-    create_order_page.enter_buyer_phone_number("")
     create_order_page.enter_buyer_name(name)
     create_order_page.click_order_btn()
 
@@ -441,6 +441,38 @@ def test_order_with_logged_in(driver, config, database):
     assert user_name in driver.page_source
     assert user_phone_number in driver.page_source
     assert user_address in driver.page_source
+
+    create_order_page.click_order_btn()
+
+    orders = create_order_page.get_order_in_db()
+    assert len(orders) > 0
+    create_order_page.clear_order(phone_number=config['buyer_phone_number'])
+
+
+def test_order_with_used_points(driver, config, database):
+    driver.get(config["base_url"])
+    driver.maximize_window()
+
+    home_page = HomePage(driver, config)
+
+    home_page.click_login_btn()
+    login_page = LoginPage(driver, config)
+    login_page.enter_phone_number(config['buyer_phone_number'])
+    login_page.enter_password(config['buyer_password'])
+    login_page.click_login()
+
+    home_page.click_buy_now_btn(home_page.get_first_product())
+
+    create_order_page = CreateOrderPage(driver, config, db=database)
+    user_name = create_order_page.get_buyer_name()
+    user_phone_number = create_order_page.get_buyer_phone_number()
+    user_address = create_order_page.get_buyer_address()
+
+    assert user_name in driver.page_source
+    assert user_phone_number in driver.page_source
+    assert user_address in driver.page_source
+
+    create_order_page.click_use_points()
 
     create_order_page.click_order_btn()
 
