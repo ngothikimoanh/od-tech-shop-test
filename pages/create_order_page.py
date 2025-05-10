@@ -1,6 +1,5 @@
 import re
 import time
-from tkinter import SE
 
 from selenium.webdriver.common.by import By
 from sqlalchemy import text

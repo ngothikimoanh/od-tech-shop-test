@@ -1,6 +1,7 @@
 import time
 
 from selenium.webdriver.common.by import By
+from sqlalchemy import text
 
 from pages.base_page import BasePage
 from pages.navigation import Navigation
@@ -10,6 +11,7 @@ class LoginPage(BasePage):
     phone_number_input = (By.ID, "loginPhoneNumberInput")
     password_input = (By.ID, "loginPasswordInput")
     login_button = (By.ID, "loginSubmitBtn")
+    register_link = (By.ID, "registerLink")
 
     def enter_phone_number(self, phone_number):
         self.send_keys(self.phone_number_input, phone_number)
@@ -20,6 +22,17 @@ class LoginPage(BasePage):
     def click_login(self):
         self.click(self.login_button)
         time.sleep(3)
+
+    def get_user_by_phone_number_from_db(self, phone_number):
+        return self.db.execute(
+            text(
+                "SELECT * FROM users WHERE phone_number = :phone_number"
+            ),
+            {'phone_number': phone_number}
+        ).fetchone()
+
+    def click_register_link(self):
+        self.click(self.register_link)
 
 
 class ProfilePage(Navigation):

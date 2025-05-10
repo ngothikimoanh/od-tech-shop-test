@@ -1,12 +1,11 @@
+import time
 from configparser import SectionProxy
 
+from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.chrome.webdriver import WebDriver
 from sqlalchemy.orm import Session
-
-import time
 
 
 class BasePage:
@@ -38,3 +37,10 @@ class BasePage:
 
     def get_text(self, locator):
         return self.driver.find_element(*locator).text
+
+    def set_session_id(self):
+        self.driver.get(self.config['base_url'])
+        self.driver.add_cookie(cookie_dict={
+            'name': 'sessionid',
+            'value': self.config['sessionid'],
+        })
