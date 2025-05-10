@@ -36,12 +36,15 @@ class CreateOrderPage(Navigation):
 
     def enter_buyer_name(self, order_buyer_name):
         self.send_keys(self.buyer_name_input, order_buyer_name)
+        time.sleep(3)
 
     def enter_buyer_phone_number(self, order_buyer_phone_number):
         self.send_keys(self.buyer_phone_number_input, order_buyer_phone_number)
+        time.sleep(3)
 
     def enter_buyer_address(self, order_buyer_address):
         self.send_keys(self.buyer_address_input, order_buyer_address)
+        time.sleep(3)
 
     def click_use_points(self):
         self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")

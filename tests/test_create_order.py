@@ -293,14 +293,13 @@ def test_order_fails_when_quantity_exceeds_available_stock(driver, config, datab
     product_name = home_page.get_product_name(home_page.get_first_product())
     home_page.click_buy_now_btn(home_page.get_first_product())
     create_order_page = CreateOrderPage(driver, config, db=database)
-    quantity_number_increase = 6
+    quantity_number_increase = 5
     for _ in range(quantity_number_increase):
         create_order_page.click_plus_quantity()
 
     create_order_page.enter_buyer_name(config['buyer_name'])
     create_order_page.enter_buyer_phone_number(config['buyer_phone_number'])
     create_order_page.enter_buyer_address(config['buyer_address'])
-    create_order_page.click_banking_payment_btn()
     create_order_page.click_order_btn()
 
     assert f"Sản phẩm <strong>{product_name}</strong> không đủ số lượng" in driver.page_source
