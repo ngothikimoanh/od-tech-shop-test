@@ -1,6 +1,7 @@
 import re
 import time
 
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from sqlalchemy import text
 
@@ -25,7 +26,7 @@ class CreateOrderPage(Navigation):
     order_temporary_total = (By.ID, "orderTemporary")
     order_total_amount = (By.ID, "orderTotalAmount")
 
-    number_product_in_cart = (By.CSS_SELECTOR, '.input-group-text.px-3')
+    number_product_in_cart = (By.CSS_SELECTOR, ".input-group-text.px-3")
 
     def click_minus_quantity(self):
         self.click(self.minus_quantity)
@@ -66,9 +67,10 @@ class CreateOrderPage(Navigation):
         time.sleep(3)
 
     def clear_carts(self, phone_number):
-        self.db.execute(text(
-            f"DELETE FROM carts WHERE user_id = (SELECT id FROM users WHERE phone_number=:phone_number)"),
-            {"phone_number": phone_number})
+        self.db.execute(
+            text(f"DELETE FROM carts WHERE user_id = (SELECT id FROM users WHERE phone_number=:phone_number)"),
+            {"phone_number": phone_number},
+        )
         self.db.commit()
 
     def get_browser_id(self):
@@ -103,9 +105,11 @@ class CreateOrderPage(Navigation):
             text(
                 "SELECT id FROM orders WHERE buyer_phone_number = :buyer_phone_number and address = :buyer_address and buyer_name = :buyer_name and time_cancel is null"
             ),
-            {'buyer_phone_number': self.config["buyer_phone_number"],
-             'buyer_address': self.config["buyer_address"],
-             'buyer_name': self.config["buyer_name"]}
+            {
+                "buyer_phone_number": self.config["buyer_phone_number"],
+                "buyer_address": self.config["buyer_address"],
+                "buyer_name": self.config["buyer_name"],
+            },
         ).fetchall()
 
     def get_buyer_name(self):
@@ -119,21 +123,27 @@ class CreateOrderPage(Navigation):
 
     def clear_order(self, phone_number):
         order = self.db.execute(
-            text('select id, point_used from orders where buyer_phone_number = :phone_number order by time_order desc limit 1'),
-            {'phone_number': phone_number}
+            text(
+                "select id, point_used from orders where buyer_phone_number = :phone_number order by time_order desc limit 1"
+            ),
+            {"phone_number": phone_number},
         ).fetchall()
         if order:
             order_id = order[0][0]
             point_used = order[0][1]
 
-            self.db.execute(text("update devices set status = 'Có sẵn' where id in (select device_id from order_devices where order_id = :order_id)"),
-                            {'order_id': order_id})
-            self.db.execute(text('delete from order_devices where order_id = :order_id'), {'order_id': order_id})
-
-            self.db.execute(text('delete from order_products where order_id = :order_id'), {'order_id': order_id})
             self.db.execute(
-                text('update users set points = points + :point_used where phone_number = :phone_number'),
-                {'point_used': point_used, 'phone_number': phone_number}
+                text(
+                    "update devices set status = 'Có sẵn' where id in (select device_id from order_devices where order_id = :order_id)"
+                ),
+                {"order_id": order_id},
             )
-            self.db.execute(text('delete from orders where id = :order_id'), {'order_id': order_id})
+            self.db.execute(text("delete from order_devices where order_id = :order_id"), {"order_id": order_id})
+
+            self.db.execute(text("delete from order_products where order_id = :order_id"), {"order_id": order_id})
+            self.db.execute(
+                text("update users set points = points + :point_used where phone_number = :phone_number"),
+                {"point_used": point_used, "phone_number": phone_number},
+            )
+            self.db.execute(text("delete from orders where id = :order_id"), {"order_id": order_id})
             self.db.commit()

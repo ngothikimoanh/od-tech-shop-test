@@ -2,6 +2,7 @@ import time
 from configparser import SectionProxy
 
 from selenium.webdriver.chrome.webdriver import WebDriver
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -22,7 +23,10 @@ class BasePage:
         return WebDriverWait(self.driver, self.timeout).until(EC.presence_of_all_elements_located(locator))
 
     def click(self, locator):
-        self.find_element(locator).click()
+        element = self.find_element(locator)
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+        element.click()
         time.sleep(3)
 
     def send_keys(self, locator, text):
@@ -31,16 +35,16 @@ class BasePage:
         elem.send_keys(text)
 
     def wait_for_text(self, text, by=By.TAG_NAME, value="body"):
-        WebDriverWait(self.driver, self.timeout).until(
-            EC.text_to_be_present_in_element((by, value), text)
-        )
+        WebDriverWait(self.driver, self.timeout).until(EC.text_to_be_present_in_element((by, value), text))
 
     def get_text(self, locator):
         return self.driver.find_element(*locator).text
 
     def set_session_id(self):
-        self.driver.get(self.config['base_url'])
-        self.driver.add_cookie(cookie_dict={
-            'name': 'sessionid',
-            'value': self.config['sessionid'],
-        })
+        self.driver.get(self.config["base_url"])
+        self.driver.add_cookie(
+            cookie_dict={
+                "name": "sessionid",
+                "value": self.config["sessionid"],
+            }
+        )

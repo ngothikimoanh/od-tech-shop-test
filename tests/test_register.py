@@ -108,8 +108,6 @@ def test_phone_already_registered(driver, config):
     register_page.enter_confirm_password("Oanh@123")
     register_page.click_register()
 
-    register_page.wait_for_text("Số điện thoại này đã được đăng ký.")
-
     assert "Số điện thoại này đã được đăng ký." in driver.page_source
 
 
@@ -383,7 +381,7 @@ def test_password_mismatch_with_confirm(driver, config):
     assert "Mật khẩu nhập lại không giống với mật khẩu trước" in driver.page_source
 
 
-def test_success_register(driver, config):
+def test_success_register(driver, config, database):
     driver.get(config["base_url"])
     driver.maximize_window()
 
@@ -393,7 +391,7 @@ def test_success_register(driver, config):
     login_page = LoginPage(driver, config)
     login_page.click_register_link()
 
-    register_page = RegisterPage(driver, config)
+    register_page = RegisterPage(driver, config, db=database)
 
     phone_number = "0935923546"
     password = confirm_password = "P@ssw0rd1"

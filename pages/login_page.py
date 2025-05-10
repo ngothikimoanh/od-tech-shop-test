@@ -25,10 +25,7 @@ class LoginPage(BasePage):
 
     def get_user_by_phone_number_from_db(self, phone_number):
         return self.db.execute(
-            text(
-                "SELECT * FROM users WHERE phone_number = :phone_number"
-            ),
-            {'phone_number': phone_number}
+            text("SELECT * FROM users WHERE phone_number = :phone_number"), {"phone_number": phone_number}
         ).fetchone()
 
     def click_register_link(self):

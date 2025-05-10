@@ -24,10 +24,10 @@ class RegisterPage(BasePage):
         self.click(self.register_button)
 
     def get_user_by_phone_number_from_db(self, phone_number: str):
-        return self.db.execute(text("SELECT * FROM users WHERE phone_number = :phone_number"),
-                               {'phone_number': phone_number}).fetchone()
+        return self.db.execute(
+            text("SELECT * FROM users WHERE phone_number = :phone_number"), {"phone_number": phone_number}
+        ).fetchone()
 
     def delete_user_by_phone_number_in_db(self, phone_number: str):
-        user = self.get_user_by_phone_number_from_db(phone_number)
-        self.db.delete(user)
+        self.db.execute(text("DELETE FROM users WHERE phone_number = :phone_number"), {"phone_number": phone_number})
         self.db.commit()

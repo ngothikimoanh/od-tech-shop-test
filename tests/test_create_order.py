@@ -15,7 +15,7 @@ def test_add_one_product_to_cart(driver, config, database):
     product_detail_page.click_add_to_cart_btn()
 
     product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert product_name != '' and product_name is not None
+    assert product_name != "" and product_name is not None
 
     product_detail_page.click_cart_btn()
     assert product_name in driver.page_source
@@ -35,14 +35,14 @@ def test_add_multiple_products_to_cart(driver, config, database):
     product_detail_page.click_add_to_cart_btn()
 
     first_product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert first_product_name != '' and first_product_name is not None
+    assert first_product_name != "" and first_product_name is not None
 
     product_detail_page.click_logo_btn()
     home_page.click_second_product()
     product_detail_page.click_add_to_cart_btn()
 
     second_product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert second_product_name != '' and second_product_name is not None
+    assert second_product_name != "" and second_product_name is not None
 
     product_detail_page.click_cart_btn()
     assert first_product_name in driver.page_source
@@ -66,7 +66,7 @@ def test_add_many_quantity_product_to_cart(driver, config, database):
         product_detail_page.click_add_to_cart_btn()
 
     product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert product_name != '' and product_name is not None
+    assert product_name != "" and product_name is not None
 
     product_detail_page.click_cart_btn()
     assert product_name in driver.page_source
@@ -103,7 +103,7 @@ def test_buy_now_in_detail_page(driver, config, database):
     product_detail_page = ProductDetailPage(driver, config)
 
     product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert product_name != '' and product_name is not None
+    assert product_name != "" and product_name is not None
 
     product_detail_page.click_buy_now_btn()
     assert product_name in driver.page_source
@@ -120,8 +120,8 @@ def test_add_one_product_to_car_logged_in(driver, config, database):
 
     home_page.click_login_btn()
     login_page = LoginPage(driver, config)
-    login_page.enter_phone_number(config['buyer_phone_number'])
-    login_page.enter_password(config['buyer_password'])
+    login_page.enter_phone_number(config["buyer_phone_number"])
+    login_page.enter_password(config["buyer_password"])
     login_page.click_login()
 
     home_page.click_first_product()
@@ -130,7 +130,7 @@ def test_add_one_product_to_car_logged_in(driver, config, database):
     product_detail_page.click_add_to_cart_btn()
 
     product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert product_name != '' and product_name is not None
+    assert product_name != "" and product_name is not None
 
     product_detail_page.click_cart_btn()
 
@@ -155,8 +155,8 @@ def test_sync_updated_user_name_to_cart_logged_in(driver, config, database):
 
     home_page.click_login_btn()
     login_page = LoginPage(driver, config)
-    login_page.enter_phone_number(config['buyer_phone_number'])
-    login_page.enter_password(config['buyer_password'])
+    login_page.enter_phone_number(config["buyer_phone_number"])
+    login_page.enter_password(config["buyer_password"])
     login_page.click_login()
 
     home_page.click_first_product()
@@ -165,7 +165,7 @@ def test_sync_updated_user_name_to_cart_logged_in(driver, config, database):
     product_detail_page.click_add_to_cart_btn()
 
     product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert product_name != '' and product_name is not None
+    assert product_name != "" and product_name is not None
 
     product_detail_page.click_cart_btn()
     assert product_name in driver.page_source
@@ -193,8 +193,8 @@ def test_sync_updated_user_address_to_cart_logged_in(driver, config, database):
 
     home_page.click_login_btn()
     login_page = LoginPage(driver, config)
-    login_page.enter_phone_number(config['buyer_phone_number'])
-    login_page.enter_password(config['buyer_password'])
+    login_page.enter_phone_number(config["buyer_phone_number"])
+    login_page.enter_password(config["buyer_password"])
     login_page.click_login()
 
     home_page.click_first_product()
@@ -203,7 +203,7 @@ def test_sync_updated_user_address_to_cart_logged_in(driver, config, database):
     product_detail_page.click_add_to_cart_btn()
 
     product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert product_name != '' and product_name is not None
+    assert product_name != "" and product_name is not None
 
     product_detail_page.click_cart_btn()
     assert product_name in driver.page_source
@@ -231,8 +231,8 @@ def test_sync_updated_user_infor_to_cart_logged_in(driver, config, database):
 
     home_page.click_login_btn()
     login_page = LoginPage(driver, config)
-    login_page.enter_phone_number(config['buyer_phone_number'])
-    login_page.enter_password(config['buyer_password'])
+    login_page.enter_phone_number(config["buyer_phone_number"])
+    login_page.enter_password(config["buyer_password"])
     login_page.click_login()
 
     home_page.click_first_product()
@@ -241,7 +241,7 @@ def test_sync_updated_user_infor_to_cart_logged_in(driver, config, database):
     product_detail_page.click_add_to_cart_btn()
 
     product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert product_name != '' and product_name is not None
+    assert product_name != "" and product_name is not None
 
     product_detail_page.click_cart_btn()
     assert product_name in driver.page_source
@@ -275,7 +275,7 @@ def test_delete_product_cart(driver, config, database):
     product_detail_page.click_add_to_cart_btn()
 
     product_name = product_detail_page.get_product_name_title().replace("Điện thoại ", "")
-    assert product_name != '' and product_name is not None
+    assert product_name != "" and product_name is not None
 
     product_detail_page.click_cart_btn()
     assert product_name in driver.page_source
@@ -297,13 +297,13 @@ def test_order_fails_when_quantity_exceeds_available_stock(driver, config, datab
     for _ in range(quantity_number_increase):
         create_order_page.click_plus_quantity()
 
-    create_order_page.enter_buyer_name(config['buyer_name'])
-    create_order_page.enter_buyer_phone_number(config['buyer_phone_number'])
-    create_order_page.enter_buyer_address(config['buyer_address'])
+    create_order_page.enter_buyer_name(config["buyer_name"])
+    create_order_page.enter_buyer_phone_number(config["buyer_phone_number"])
+    create_order_page.enter_buyer_address(config["buyer_address"])
     create_order_page.click_order_btn()
 
     assert f"Sản phẩm <strong>{product_name}</strong> không đủ số lượng" in driver.page_source
-    create_order_page.clear_carts(phone_number=config['buyer_name'])
+    create_order_page.clear_cart_by_browser_id()
 
 
 def test_order_fails_with_only_user_name_provided(driver, config, database):
@@ -387,15 +387,15 @@ def test_order_with_cash_payment(driver, config, database):
     home_page.click_buy_now_btn(home_page.get_first_product())
 
     create_order_page = CreateOrderPage(driver, config, db=database)
-    create_order_page.enter_buyer_name(config['buyer_name'])
-    create_order_page.enter_buyer_phone_number(config['buyer_phone_number'])
-    create_order_page.enter_buyer_address(config['buyer_address'])
+    create_order_page.enter_buyer_name(config["buyer_name"])
+    create_order_page.enter_buyer_phone_number(config["buyer_phone_number"])
+    create_order_page.enter_buyer_address(config["buyer_address"])
     create_order_page.click_cash_payment_btn()
     create_order_page.click_order_btn()
 
     orders = create_order_page.get_order_in_db()
     assert len(orders) > 0
-    create_order_page.clear_order(phone_number=config['buyer_phone_number'])
+    create_order_page.clear_order(phone_number=config["buyer_phone_number"])
 
 
 def test_order_with_banking_payment(driver, config, database):
@@ -407,15 +407,15 @@ def test_order_with_banking_payment(driver, config, database):
     home_page.click_buy_now_btn(home_page.get_first_product())
 
     create_order_page = CreateOrderPage(driver, config, db=database)
-    create_order_page.enter_buyer_name(config['buyer_name'])
-    create_order_page.enter_buyer_phone_number(config['buyer_phone_number'])
-    create_order_page.enter_buyer_address(config['buyer_address'])
+    create_order_page.enter_buyer_name(config["buyer_name"])
+    create_order_page.enter_buyer_phone_number(config["buyer_phone_number"])
+    create_order_page.enter_buyer_address(config["buyer_address"])
     create_order_page.click_banking_payment_btn()
     create_order_page.click_order_btn()
 
     orders = create_order_page.get_order_in_db()
     assert len(orders) > 0
-    create_order_page.clear_order(phone_number=config['buyer_phone_number'])
+    create_order_page.clear_order(phone_number=config["buyer_phone_number"])
 
 
 def test_order_with_logged_in(driver, config, database):
@@ -426,8 +426,8 @@ def test_order_with_logged_in(driver, config, database):
 
     home_page.click_login_btn()
     login_page = LoginPage(driver, config)
-    login_page.enter_phone_number(config['buyer_phone_number'])
-    login_page.enter_password(config['buyer_password'])
+    login_page.enter_phone_number(config["buyer_phone_number"])
+    login_page.enter_password(config["buyer_password"])
     login_page.click_login()
 
     home_page.click_buy_now_btn(home_page.get_first_product())
@@ -445,7 +445,7 @@ def test_order_with_logged_in(driver, config, database):
 
     orders = create_order_page.get_order_in_db()
     assert len(orders) > 0
-    create_order_page.clear_order(phone_number=config['buyer_phone_number'])
+    create_order_page.clear_order(phone_number=config["buyer_phone_number"])
 
 
 def test_order_with_used_points(driver, config, database):
@@ -456,8 +456,8 @@ def test_order_with_used_points(driver, config, database):
 
     home_page.click_login_btn()
     login_page = LoginPage(driver, config)
-    login_page.enter_phone_number(config['buyer_phone_number'])
-    login_page.enter_password(config['buyer_password'])
+    login_page.enter_phone_number(config["buyer_phone_number"])
+    login_page.enter_password(config["buyer_password"])
     login_page.click_login()
 
     home_page.click_buy_now_btn(home_page.get_first_product())
@@ -477,4 +477,4 @@ def test_order_with_used_points(driver, config, database):
 
     orders = create_order_page.get_order_in_db()
     assert len(orders) > 0
-    create_order_page.clear_order(phone_number=config['buyer_phone_number'])
+    create_order_page.clear_order(phone_number=config["buyer_phone_number"])
